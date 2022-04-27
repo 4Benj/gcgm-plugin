@@ -1,0 +1,4 @@
+rootProject.name = 'gcgm'
+
+include 'gc-plugin'
+include 'web-interface'
