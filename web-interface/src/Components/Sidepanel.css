@@ -1,0 +1,170 @@
+.dashboard .sidepanel {
+    position: relative;
+    float: left;
+    height: 100vh;
+    width: 350px;
+
+    /*border-radius: 15px;
+
+    -webkit-box-shadow: 0px 0px 6px 1px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 6px 1px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 6px 1px rgba(0,0,0,0.75);*/
+    background-color: #fff;
+
+    text-align: center;
+}
+
+.dashboard .sidepanel .logo {
+    position: relative;
+
+    margin: 15px auto;
+    /*border-bottom: 1px black solid;*/
+    height: 65px;
+    width: 250px;
+
+    transition: 0.4s linear;
+}
+
+.dashboard .sidepanel .logo:hover {
+    height: 70px;
+    width: 275px;
+    background-color: #eee;
+    border-radius: 10px;
+
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    cursor: pointer;
+}
+
+.dashboard .sidepanel .logo img {
+    position: absolute;
+    transform: translate(0%, -50%);
+    top: 50%;
+    left: 5px;
+
+    float: left;
+    height: 45px;
+    transition: 0.4s linear;
+}
+
+.dashboard .sidepanel .logo:hover img {
+    height: 50px;
+    left: 10px;
+}
+
+.dashboard .sidepanel .logo p {
+    float: left;
+    margin: 0;
+    margin-left: 60px;
+    line-height: 65px;
+    font-size: 19px;
+    transition: 0.4s linear;
+}
+
+.dashboard .sidepanel .logo:hover p {
+    float: left;
+    margin: 0;
+    margin-left: 70px;
+    line-height: 70px;
+    font-size: 21px;
+}
+
+.dashboard .sidepanel hr {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 10%;
+    left: 50%;
+    width: 70%
+}
+
+.dashboard .navigation {
+    position:absolute;
+    transform: translate(-50%, 0%);
+    top: 8%;
+    left: 50%;
+
+    margin-top: 60px;
+}
+
+.dashboard .navigation .nav-button {
+    position: relative;
+    line-height: 35px;
+    height: 35px;
+    width: 200px;
+    margin: auto;
+    margin-bottom: 15px;
+}
+
+.dashboard .navigation .nav-button {
+    cursor: pointer;
+}
+
+.dashboard .navigation .nav-button svg {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 10%;
+    width: 18px;
+    height: 18px;
+    float: left;
+    padding: 4px;
+    
+
+    border-color: #aaa;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 2px;
+
+    transition: 0.3s linear;
+}
+
+.dashboard .navigation .nav-button:hover svg {
+    width: 22px;
+    height: 22px;
+
+    background-color: #64BDF7;
+}
+
+.dashboard .navigation .nav-button p {
+    float: left;
+    margin: 0;
+    padding-left: 60px;
+
+    transition: 0.3s linear;
+}
+
+.dashboard .navigation .nav-button:hover p {
+    padding-left: 70px;
+    font-size: 18px;
+}
+
+.dashboard .simple-button#collapse {
+    position: absolute;
+    bottom: 2%;
+    right: 15%;
+}
+
+.dashboard .simple-button {
+    position: relative;
+    height: 18px;
+    margin: auto;
+    margin-bottom: 13px;
+}
+
+.dashboard .simple-button svg {
+    position: absolute;
+    transform: translate(0, -50%);
+    top: 50%;
+    left: 4%;
+    width: 18px;
+    height: 18px;
+    float: left;
+    padding: 4px;
+    
+
+    border-color: #aaa;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 2px;
+}

@@ -1,49 +1,35 @@
 package com.benj4.gcgm;
 
-import com.sun.net.httpserver.HttpExchange;
 import emu.grasscutter.Grasscutter;
 import emu.grasscutter.plugin.Plugin;
-import emu.grasscutter.server.dispatch.DispatchServer;
 import emu.grasscutter.utils.Utils;
-import net.lingala.zip4j.ZipFile;
+import express.Express;
+import io.javalin.http.staticfiles.Location;
 
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-
-import static com.benj4.gcgm.util.WebUtil.getFileExtensionImproved;
-import static com.benj4.gcgm.util.WebUtil.responseStream;
 
 public class GCGMPlugin extends Plugin {
-
 
     File webData;
 
     @Override
     public void onLoad() {
-        Grasscutter.getLogger().info("Loading GCGM...");
-
-        File pluginDataDir = new File(Utils.toFilePath(Grasscutter.getConfig().PLUGINS_FOLDER + "/gcgm"));
-        webData = new File(Utils.toFilePath(Grasscutter.getConfig().PLUGINS_FOLDER + "/gcgm/www"));
-        String zipFileLoc = Utils.toFilePath(Grasscutter.getConfig().PLUGINS_FOLDER + "/gcgm/DefaultWebApp.zip");
+        File pluginDataDir = getDataFolder();
+        webData = new File(Utils.toFilePath(getDataFolder().getPath() + "/www"));
+        String zipFileLoc = Utils.toFilePath(getDataFolder().getPath() + "/DefaultWebApp.zip");
 
         if(!pluginDataDir.exists() && !pluginDataDir.mkdirs()) {
-            Grasscutter.getLogger().error("Failed to create plugin data directory directory: " + pluginDataDir.getAbsolutePath());
+            Grasscutter.getLogger().error("[GCGM] Failed to create plugin data directory directory: " + pluginDataDir.getAbsolutePath());
             return;
         }
 
         if(!webData.exists()) {
-            Grasscutter.getLogger().warn("The './plugins/gcgm/www' folder does not exist.");
+            Grasscutter.getLogger().warn("[GCGM] The './plugins/GCGM/www' folder does not exist.");
 
             // Get the ZIP
             URL url = null;
@@ -59,12 +45,12 @@ public class GCGMPlugin extends Plugin {
             try {
                 // Copy the the zip from resources to the plugin's data directory
                 if(!new File(zipFileLoc).exists()) {
-                    Grasscutter.getLogger().info("Copying 'DefaultWebApp.zip' to './plugins/gcgm'");
+                    Grasscutter.getLogger().info("[GCGM] Copying 'DefaultWebApp.zip' to './plugins/GCGM'");
                     Files.copy(defaultWebAppZip, Paths.get(new File(zipFileLoc).toURI()), StandardCopyOption.REPLACE_EXISTING);
                 }
 
-                Grasscutter.getLogger().warn("Please extract the contents of 'DefaultWebApp.zip' from within './plugins/gcgm' to './plugins/gcgm/www");
-                Grasscutter.getLogger().warn("Your server will now exit to allow this process to be completed");
+                Grasscutter.getLogger().warn("[GCGM] Please extract the contents of 'DefaultWebApp.zip' from within './plugins/GCGM' to './plugins/GCGM/www");
+                Grasscutter.getLogger().warn("[GCGM] Your server will now exit to allow this process to be completed");
 
                 System.exit(0);
             } catch (Exception e) {
@@ -72,90 +58,31 @@ public class GCGMPlugin extends Plugin {
             }
         } else {
             if(new File(zipFileLoc).exists()) {
-                Grasscutter.getLogger().info("Note: You can now safely delete 'DefaultWebApp.zip' from within './plugins/gcgm'");
+                Grasscutter.getLogger().info("[GCGM] Note: You can now safely delete 'DefaultWebApp.zip' from within './plugins/GCGM'");
             }
         }
 
-        Grasscutter.getLogger().info("GCGM has now loaded...");
+        Grasscutter.getLogger().info("[GCGM] GCGM has now loaded...");
     }
 
     @Override
     public void onEnable() {
-        Grasscutter.getLogger().info("GCGM Enabled");
+        Express app = Grasscutter.getDispatchServer().getServer();
 
-        List<File> wwwFiles = listf(webData.getAbsolutePath());
+        app.raw().config.precompressStaticFiles = false;
+        app.raw().config.addStaticFiles("/gm", webData.getAbsolutePath(), Location.EXTERNAL);
+        app.raw().config.addSinglePageRoot("/gm", Utils.toFilePath(getDataFolder().getPath() + "/www/index.html"), Location.EXTERNAL);
 
-        Grasscutter.getDispatchServer().getServer().createContext("/gm", t -> {
-            File file = new File(Utils.toFilePath(webData.getAbsolutePath() + "/index.html"));
-
-            responseStream(t, file, "text/html");
-        });
-
-        for (File file : wwwFiles) {
-            String fromWebRoot = file.getAbsolutePath().replace(webData.getAbsolutePath(), "");
-            fromWebRoot = fromWebRoot.replace("\\", "/");
-
-            Grasscutter.getDispatchServer().getServer().createContext("/gm" + fromWebRoot, t -> {
-                String fileExtension = getFileExtensionImproved(file.getAbsolutePath());
-                String contentType = "";
-                switch(fileExtension.toLowerCase()) {
-                    case "png" -> {
-                        contentType = "image/png";
-                    }
-                    case "js" -> {
-                        contentType = "text/javascript";
-                    }
-                    case "css" -> {
-                        contentType = "text/css";
-                    }
-                    case "html" -> {
-                        contentType = "text/html";
-                    }
-                    case "json", "map" -> {
-                        // A .map file is probably .css.map or .js.map file. So i'll return the save as .json
-                        contentType = "application/json";
-                    }
-                    case "ico" -> {
-                        contentType = "image/x-icon";
-
-                    }
-                    case "svg" -> {
-                        contentType = "image/svg+xml";
-
-                    }
-                    default ->{
-                        contentType = "unknown";
-                        Grasscutter.getLogger().error("Unknown content type for extension: " + fileExtension);
-                        Grasscutter.getLogger().error("For file: " + file.getAbsolutePath());
-                    }
-                }
-                responseStream(t, file, contentType);
-            });
-        }
+        Grasscutter.getLogger().info("[GCGM] GCGM Enabled");
+        Grasscutter.getLogger().info("[GCGM] You can access your GM panel by navigating to http" + (Grasscutter.getConfig().getDispatchOptions().FrontHTTPS ? "s" : "") + "://" +
+                (Grasscutter.getConfig().getDispatchOptions().PublicIp.isEmpty() ? Grasscutter.getConfig().getDispatchOptions().Ip : Grasscutter.getConfig().getDispatchOptions().PublicIp) +
+                ":" + (Grasscutter.getConfig().getDispatchOptions().PublicPort != 0 ? Grasscutter.getConfig().getDispatchOptions().PublicPort : Grasscutter.getConfig().getDispatchOptions().Port) +
+                "/gm"
+        );
     }
-
-
 
     @Override
     public void onDisable() {
-        Grasscutter.getLogger().info("GCGM Disabled");
-    }
-
-    private List<File> listf(String directoryName) {
-        File directory = new File(directoryName);
-        List<File> files = new ArrayList<File>();
-
-        // Get all files from a directory.
-        File[] fList = directory.listFiles();
-        if (fList != null) {
-            for (File file : fList) {
-                if (file.isFile()) {
-                    files.add(file);
-                } else if (file.isDirectory()) {
-                    files.addAll(listf(file.getAbsolutePath()));
-                }
-            }
-        }
-        return files;
+        Grasscutter.getLogger().info("[GCGM] GCGM Disabled");
     }
 }

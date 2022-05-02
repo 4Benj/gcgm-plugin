@@ -1,7 +1,7 @@
 {
-  "name": "GCGM Plugin",
+  "name": "GCGM",
   "description": "Grasscutter Game Master Management UI",
-  "version": "1.0.0",
+  "version": "dev-1.0.0",
   
   "mainClass": "com.benj4.gcgm.GCGMPlugin",
   "authors": ["4Benj_"]

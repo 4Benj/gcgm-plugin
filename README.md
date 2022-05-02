@@ -3,7 +3,9 @@ GCGM is the first [Grasscutter](https://github.com/Grasscutters/Grasscutter) plu
 
 ## Currently Planned Features: 
 - [x] Loading basic web page
-- [ ] Nice looking CSS
+- [x] Nice looking CSS
+- [ ] Websockets
+- [ ] Widgets
 - [ ] Server performance stats
 - [ ] See players registered to dispatch server
 - [ ] See players currently online
@@ -15,7 +17,7 @@ The features listed are to achieve an MVP for the first release.
 
 ## Important Notes:
 This plugin is made to run on the current [Development](https://github.com/Grasscutters/Grasscutter/tree/development) branch of Grasscutter. \
-This plugin is in very early development and the web dashboard only displays the default react webpage. \
+This plugin is in very early development and the web dashboard only displays a side panel, so it is not really in a usable state. \
 **If you require support please ask on the [Grasscutter Discord](https://discord.gg/T5vZU6UyeG). However, support is not guarenteed.**
 
 ## Setup 
@@ -24,11 +26,12 @@ Coming soon!
 
 ### Compile yourself
 1. Pull the latest code from github using ``git clone https://github.com/Grasscutters/gcgm-plugin`` in your terminal of choice.
-2. Navigate into the newly created ``gcgm-plugin`` folder and run ``gradlew build`` (cmd) **or** ``./gradlew build`` (Powershell, Linux & Mac).
-3. Assuming the build succeeded, in your file explorer navigate to the ``gc-plugin`` folder, you should have a ``gcgm-plugin.jar`` file, copy it.
-4. Navigate to your ``Grasscutter`` server, find the ``plugins`` folder and paste the ``gcgm-plugin.jar`` into it. 
-5. Start your server.
-6. Your server should then start and after a few seconds, you should be greated with these messages and the server will quit.
+2. Locate your grasscutter server and copy the ``grasscutter`` server jar into the newly created ``gcgm-plugin/gc-plugin/lib`` folder
+3. Navigate back into the project root folder called ``gcgm-plugin`` folder and run ``gradlew build`` (cmd) **or** ``./gradlew build`` (Powershell, Linux & Mac).
+4. Assuming the build succeeded, in your file explorer navigate to the ``gc-plugin`` folder, you should have a ``gcgm-plugin.jar`` file, copy it.
+5. Navigate to your ``Grasscutter`` server, find the ``plugins`` folder and paste the ``gcgm-plugin.jar`` into it. 
+6. Start your server.
+7. Your server should then start and after a few seconds, you should be greated with these messages and the server will quit.
 ```
 [WARN] The './plugins/gcgm/www' folder does not exist.
 [WARN] Please extract the contents of 'DefaultWebApp.zip' from within './plugins/gcgm' to './plugins/gcgm/www
