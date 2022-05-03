@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import gclogo from "../img/grasscutter-icon.png"
+import gclogo from "../../../img/grasscutter-icon.png"
 import NavigationButton from './NavigationButton'
 import SimpleButton from './SimpleButton'
 import { faArrowLeft, faCogs, faGamepad, faHome, faNetworkWired } from '@fortawesome/free-solid-svg-icons'
