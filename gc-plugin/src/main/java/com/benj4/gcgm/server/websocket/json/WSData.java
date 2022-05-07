@@ -2,10 +2,10 @@ package com.benj4.gcgm.server.websocket.json;
 
 public class WSData {
     public String eventName;
-    public Object object;
+    public Object data;
 
-    public WSData(String eventName, Object object) {
+    public WSData(String eventName, Object data) {
         this.eventName = eventName;
-        this.object = object;
+        this.data = data;
     }
 }

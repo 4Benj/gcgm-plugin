@@ -6,9 +6,12 @@ import com.benj4.gcgm.utils.*;
 import com.benj4.gcgm.utils.web.WebUtils;
 import emu.grasscutter.Grasscutter;
 import emu.grasscutter.plugin.Plugin;
+import emu.grasscutter.plugin.api.ServerHook;
+import emu.grasscutter.server.dispatch.DispatchServer;
 import emu.grasscutter.server.event.EventHandler;
 import emu.grasscutter.server.event.HandlerPriority;
 import emu.grasscutter.server.event.game.ServerTickEvent;
+import emu.grasscutter.server.game.GameServer;
 import emu.grasscutter.utils.Utils;
 import express.Express;
 
@@ -18,7 +21,7 @@ public class GCGMPlugin extends Plugin {
 
     private static GCGMPlugin INSTANCE;
     EventHandler<ServerTickEvent> serverTickEventHandler;
-    private static WebSocketServer webSocketServer;
+    private WebSocketServer webSocketServer;
     private File webData;
 
     @Override
@@ -57,12 +60,11 @@ public class GCGMPlugin extends Plugin {
     @Override
     public void onEnable() {
         if(webData.exists()) {
-            Express app = Grasscutter.getDispatchServer().getServer();
-            WebUtils.addStaticFiles(app, webData);
+            WebUtils.addStaticFiles(webData);
             webSocketServer = new WebSocketServer();
-            webSocketServer.start(app);
+            webSocketServer.start();
 
-            Grasscutter.getPluginManager().registerListener(serverTickEventHandler);
+            serverTickEventHandler.register();
 
             Grasscutter.getLogger().info("[GCGM] GCGM Enabled");
             Grasscutter.getLogger().info("[GCGM] You can access your GM panel by navigating to " + GCGMUtils.GetDispatchAddress() + WebUtils.PAGE_ROOT);
@@ -78,11 +80,19 @@ public class GCGMPlugin extends Plugin {
         Grasscutter.getLogger().info("[GCGM] GCGM Disabled");
     }
 
-    public static GCGMPlugin GetInstance() {
+    public static GCGMPlugin getInstance() {
         return INSTANCE;
     }
 
-    public static WebSocketServer getWebSocketServer() {
+    public WebSocketServer getWebSocketServer() {
         return webSocketServer;
+    }
+    
+    public static GameServer getGameServer() {
+        return GCGMPlugin.getInstance().getServer();
+    }
+
+    public static DispatchServer getDispatchServer() {
+        return ServerHook.getInstance().getDispatchServer();
     }
 }

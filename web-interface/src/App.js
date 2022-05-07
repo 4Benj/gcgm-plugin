@@ -1,8 +1,11 @@
+import { WebsocketProvider } from './Context/WebsocketProvider';
 import Dashboard from './Dashboard';
 
 function App() {
   return (
-    <Dashboard />
+    <WebsocketProvider>
+      <Dashboard />
+    </WebsocketProvider>
   );
 }
 

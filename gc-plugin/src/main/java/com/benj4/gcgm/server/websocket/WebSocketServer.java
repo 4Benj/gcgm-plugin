@@ -1,5 +1,6 @@
 package com.benj4.gcgm.server.websocket;
 
+import com.benj4.gcgm.GCGMPlugin;
 import com.benj4.gcgm.server.websocket.json.WSData;
 import emu.grasscutter.Grasscutter;
 import express.Express;
@@ -16,7 +17,9 @@ public class WebSocketServer {
     //SocketIOServer socketIOServer;
     private static Map<WsContext, String> userUsernameMap = new ConcurrentHashMap<>();
 
-    public void start(Express app) {
+    public void start() {
+        Express app = GCGMPlugin.getDispatchServer().getServer();
+
         app.ws("/gm", ws -> {
             ws.onConnect(ctx -> {
                 String username = "Not logged in";
