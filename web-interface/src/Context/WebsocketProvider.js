@@ -9,7 +9,7 @@ const host = window.location.host;
 const port = window.location.port;
 
 function getWebsocketURL() {
-    if(ReactIsInDevelopmentMode) {
+    if(ReactIsInDevelopmentMode()) {
         return "wss://localhost:443/gm";
     } else {
         return protocol + "://"+ host +":" + port + "/gm";
